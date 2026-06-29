@@ -19,13 +19,45 @@ An interactive 3D educational game that teaches IT governance and strategic deci
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### Option 1: Play in Browser (Easiest)
 
+**Prerequisites:**
 - Modern web browser with WebGL support
-- Python 3.x (for local development server)
-- No external dependencies required (Three.js loaded from CDN)
+- Python 3.x
 
-### Installation & Running
+**Steps:**
+```bash
+cd gamecio
+python3 -m http.server 8000
+```
+Then open: `http://localhost:8000`
+
+### Option 2: Desktop App with Tauri (Recommended)
+
+**Convert to standalone .exe/.app executable**
+
+See detailed guides:
+- **Quick Start:** `TAURI_QUICKSTART.md` (5 min read)
+- **Full Setup:** `TAURI_SETUP.md` (detailed reference)
+- **Architecture:** `TAURI_OVERVIEW.md` (visual guide)
+
+**Quick Summary:**
+```bash
+cd gamecio
+npm install
+npm run tauri-build
+```
+
+Creates: `src-tauri/target/release/CIO_Simulator.exe` (~10 MB)
+
+**Benefits:**
+- ✅ Standalone executable (no browser needed)
+- ✅ Looks like native application
+- ✅ Small file size (10 MB vs 200+ MB Electron)
+- ✅ Works offline
+- ✅ Can be installed with automatic updates
+
+### Browser Installation & Running
 
 1. **Clone or download the project**
    ```bash
@@ -44,31 +76,63 @@ An interactive 3D educational game that teaches IT governance and strategic deci
 
 4. **Play!** Click "Mulai sebagai CIO Baru" to begin
 
+## 🖥 Desktop App with Tauri
+
+Convert the game into a standalone .exe/.app executable:
+
+```bash
+npm install
+npm run tauri-build
+```
+
+For detailed instructions, see:
+- **TAURI_QUICKSTART.md** - Start here (5 minute guide)
+- **TAURI_SETUP.md** - Complete reference
+- **TAURI_OVERVIEW.md** - Architecture and comparison
+
+**Result:** Standalone app ~10 MB, no browser/server needed
+
 ## 📁 Project Structure
 
 ```
 gamecio/
-├── index.html              # Main HTML entry point
-├── README.md               # This file
+├── index.html                    # Main HTML entry point
+├── README.md                     # Project documentation
+├── TAURI_QUICKSTART.md           # Quick start guide (5 min)
+├── TAURI_SETUP.md                # Complete setup reference
+├── TAURI_OVERVIEW.md             # Architecture & diagrams
+├── package.json                  # npm configuration
+├── tauri.conf.json               # Tauri app configuration
+├── Cargo.toml                    # Rust dependencies
+├── .gitignore                    # Git ignore rules
+│
 ├── css/
-│   └── styles.css          # Global styling and animations
-└── js/
-    ├── main.js             # Game orchestrator and main loop
-    ├── scene.js            # Three.js scene initialization
-    ├── gameState.js        # Game state management
-    ├── ui.js               # UI Manager for all DOM elements
-    ├── hotspots.js         # Interactive hotspot manager
-    ├── scenarios.js        # Game scenarios and branching logic
-    ├── audio.js            # Audio synthesis and playback
-    ├── leaderboard.js      # Leaderboard persistence (localStorage)
-    ├── config.js           # Global configuration
-    ├── utils.js            # Utility functions
-    ├── qrCode.js           # QR code generation
-    └── worlds/
-        ├── worldFactory.js      # World builder factory
-        ├── corporateWorld.js    # Corporate office 3D scene
-        ├── hospitalWorld.js     # Hospital 3D scene
-        └── campusWorld.js       # Campus 3D scene
+│   └── styles.css                # Global styling and animations
+│
+├── js/
+│   ├── main.js                   # Game orchestrator and main loop
+│   ├── scene.js                  # Three.js scene initialization
+│   ├── gameState.js              # Game state management
+│   ├── ui.js                     # UI Manager for all DOM elements
+│   ├── hotspots.js               # Interactive hotspot manager
+│   ├── scenarios.js              # Game scenarios and branching logic
+│   ├── audio.js                  # Audio synthesis and playback
+│   ├── leaderboard.js            # Leaderboard persistence (localStorage)
+│   ├── config.js                 # Global configuration
+│   ├── utils.js                  # Utility functions
+│   ├── qrCode.js                 # QR code generation
+│   └── worlds/
+│       ├── worldFactory.js       # World builder factory
+│       ├── corporateWorld.js     # Corporate office 3D scene
+│       ├── hospitalWorld.js      # Hospital 3D scene
+│       └── campusWorld.js        # Campus 3D scene
+│
+└── src-tauri/                    # Tauri backend (Rust)
+    ├── main.rs                   # Rust entry point
+    ├── build.rs                  # Build script
+    ├── Cargo.toml                # Rust dependencies
+    └── target/release/           # Build output
+        └── CIO_Simulator.exe     # Final executable (after build)
 ```
 
 ## 🎯 Gameplay
@@ -221,6 +285,29 @@ Deploy to any static hosting service:
 - AWS S3 + CloudFront
 
 No backend required - everything runs client-side.
+
+### Desktop App Distribution (Tauri)
+
+Build and distribute standalone .exe/.app executables:
+
+```bash
+# Prerequisites: Node.js and Rust installed
+
+# Build executable
+npm install
+npm run tauri-build
+
+# Output location
+src-tauri/target/release/CIO_Simulator.exe  # ~10 MB
+```
+
+Distribute via:
+- Direct download (GitHub Releases)
+- Windows Package Managers (Choco, Winget)
+- Installer (NSIS/Inno Setup)
+- Microsoft Store
+
+See `TAURI_QUICKSTART.md` for detailed instructions.
 
 ### Local Development
 ```bash
