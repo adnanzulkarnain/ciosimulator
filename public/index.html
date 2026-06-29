@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CIO Simulator — Game Edukasi Tata Kelola TI</title>
+  <meta name="description" content="Rasakan jadi CIO! Game edukasi 3D interaktif tentang tata kelola sistem informasi. Buat keputusan strategis sebagai Chief Information Officer.">
+  <meta name="theme-color" content="#f8fafd">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="game-container" id="game-container">
+
+    <!-- Three.js Canvas Layer -->
+    <div class="canvas-container" id="canvas-container"></div>
+
+    <!-- HUD Overlay (visible during explore phase) -->
+    <div class="hud-overlay" id="hud-overlay" style="display:none">
+      <div class="hud-gauges">
+        <div class="hud-gauge" id="gauge-reputation">
+          <span class="hud-gauge-label">Reputasi</span>
+          <div class="hud-gauge-bar">
+            <div class="hud-gauge-fill reputation" id="gauge-reputation-fill" style="width:50%"></div>
+          </div>
+          <span class="hud-gauge-value" id="gauge-reputation-value">50</span>
+        </div>
+        <div class="hud-gauge" id="gauge-finance">
+          <span class="hud-gauge-label">Keuangan</span>
+          <div class="hud-gauge-bar">
+            <div class="hud-gauge-fill finance" id="gauge-finance-fill" style="width:50%"></div>
+          </div>
+          <span class="hud-gauge-value" id="gauge-finance-value">50</span>
+        </div>
+        <div class="hud-gauge" id="gauge-compliance">
+          <span class="hud-gauge-label">Kepatuhan</span>
+          <div class="hud-gauge-bar">
+            <div class="hud-gauge-fill compliance" id="gauge-compliance-fill" style="width:50%"></div>
+          </div>
+          <span class="hud-gauge-value" id="gauge-compliance-value">50</span>
+        </div>
+      </div>
+      <div class="hud-right">
+        <div class="hud-timer" id="hud-timer">5:00</div>
+        <div class="hud-progress" id="hud-progress">Keputusan 0/6</div>
+        <button class="btn-icon" id="btn-mute" title="Mute/Unmute">🔊</button>
+        <button class="btn-icon attendant-only" id="btn-attendant-finish" title="Akhiri sesi">⏭</button>
+        <button class="btn-icon attendant-only" id="btn-attendant-reset" title="Reset sesi">↺</button>
+      </div>
+    </div>
+
+    <!-- Scenario Panel (appears over 3D scene) -->
+    <div class="scenario-panel" id="scenario-panel" style="display:none">
+      <div class="glass-panel scenario-card">
+        <div class="scenario-header">
+          <span class="scenario-icon" id="scenario-icon">💻</span>
+          <h2 class="scenario-title" id="scenario-title"></h2>
+        </div>
+        <p class="scenario-description" id="scenario-description"></p>
+        <div class="scenario-choices" id="scenario-choices"></div>
+      </div>
+    </div>
+
+    <!-- Feedback Toast Container -->
+    <div class="feedback-container" id="feedback-container"></div>
+
+    <!-- SCREEN: Title -->
+    <div class="screen-overlay screen-title" id="screen-title">
+      <div class="title-content">
+        <div class="title-logo">
+          <div class="title-icon">CIO</div>
+          <h1 class="title-text">CIO <span class="text-gradient">Simulator</span></h1>
+          <p class="title-subtitle">Game Edukasi Tata Kelola Sistem Informasi</p>
+        </div>
+        <div class="level-selector" id="level-selector"></div>
+        <button class="btn btn-primary btn-lg" id="btn-start">
+          <span>Mulai sebagai CIO Baru</span>
+          <span class="btn-arrow">→</span>
+        </button>
+        <div class="brand-badge">
+          <span>Program Studi S1 Sistem Informasi</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN: Intro -->
+    <div class="screen-overlay screen-intro" id="screen-intro" style="display:none">
+      <div class="glass-panel intro-panel">
+        <div class="intro-avatar">CIO</div>
+        <h2 id="intro-title">Selamat Datang, CIO Baru!</h2>
+        <p id="intro-role">Anda baru saja ditunjuk sebagai <strong>Chief Information Officer</strong> di <strong>PT Nusantara Digital</strong>.</p>
+        <p class="intro-mission" id="intro-mission">"Pimpin transformasi digital perusahaan tanpa membuatnya bangkrut, diretas, atau melanggar hukum."</p>
+        <p class="intro-hint">Klik objek-objek yang berkedip di kantor Anda untuk mengambil keputusan. Setiap pilihan akan memengaruhi Reputasi, Keuangan, dan Kepatuhan perusahaan.</p>
+        <button class="btn btn-primary btn-lg" id="btn-enter-office">
+          <span>Masuk Kantor</span>
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN: Explore (no visible overlay — just a hidden anchor) -->
+    <div class="screen-overlay screen-explore" id="screen-explore" style="display:none"></div>
+
+    <!-- SCREEN: Result -->
+    <div class="screen-overlay screen-result" id="screen-result" style="display:none">
+      <div class="glass-panel result-panel">
+        <div class="result-badge">✓</div>
+        <h2 class="result-title" id="result-title">CIO Visioner</h2>
+        <p class="result-description" id="result-description"></p>
+        <div class="result-score">Skor: <span id="result-score">0</span>/100</div>
+        <div class="result-gauges">
+          <div class="result-gauge">
+            <span class="result-gauge-label">Reputasi</span>
+            <div class="hud-gauge-bar">
+              <div class="hud-gauge-fill reputation" id="result-gauge-reputation" style="width:0%"></div>
+            </div>
+          </div>
+          <div class="result-gauge">
+            <span class="result-gauge-label">Keuangan</span>
+            <div class="hud-gauge-bar">
+              <div class="hud-gauge-fill finance" id="result-gauge-finance" style="width:0%"></div>
+            </div>
+          </div>
+          <div class="result-gauge">
+            <span class="result-gauge-label">Kepatuhan</span>
+            <div class="hud-gauge-bar">
+              <div class="hud-gauge-fill compliance" id="result-gauge-compliance" style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+        <p class="result-edu" id="result-edu-message"></p>
+        <div class="impact-list" id="impact-list"></div>
+        <button class="btn btn-primary" id="btn-view-leaderboard">
+          <span>Lihat Peringkat</span>
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN: Leaderboard -->
+    <div class="screen-overlay screen-leaderboard" id="screen-leaderboard" style="display:none">
+      <div class="glass-panel leaderboard-panel">
+        <h2>Papan Peringkat</h2>
+        <div class="leaderboard-input">
+          <input type="text" id="input-name" placeholder="Nama kamu" maxlength="30" class="input-field">
+          <input type="text" id="input-school" placeholder="Asal sekolah" maxlength="50" class="input-field">
+          <button class="btn btn-primary" id="btn-save-score">Simpan Skor</button>
+        </div>
+        <div class="leaderboard-table-container">
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nama</th>
+                <th>Sekolah</th>
+                <th>Gelar</th>
+                <th>Skor</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-table-body"></tbody>
+          </table>
+        </div>
+        <button class="btn btn-primary btn-lg" id="btn-to-cta">
+          <span>Lanjut</span>
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN: CTA -->
+    <div class="screen-overlay screen-cta" id="screen-cta" style="display:none">
+      <div class="glass-panel cta-panel">
+        <h2>Tertarik Jadi CIO Sungguhan?</h2>
+        <p>Pelajari lebih lanjut tentang Program Studi S1 Sistem Informasi!</p>
+        <div class="qr-section">
+          <div class="qr-placeholder" id="qr-code"></div>
+          <p class="qr-caption">Scan untuk info Program Studi</p>
+        </div>
+        <button class="btn btn-primary btn-lg" id="btn-play-again">
+          <span>Main Lagi</span>
+        </button>
+        <div class="brand-badge">
+          <span>Program Studi S1 Sistem Informasi</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
