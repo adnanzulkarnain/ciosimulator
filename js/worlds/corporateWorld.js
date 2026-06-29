@@ -1123,32 +1123,7 @@ export function buildCorporateWorld(scene) {
   }
 
   /* ─────────────── 11. World Theme Accents ───────────────── */
-  const worldAccentGroup = new THREE.Group();
-  worldAccentGroup.name = "WorldThemeAccents";
-
-  const accentMaterial = new THREE.MeshStandardMaterial({
-    color: 0x1a73e8,
-    roughness: 0.35,
-    metalness: 0.15,
-    emissive: 0x0b3d91,
-    emissiveIntensity: 0.15,
-  });
-  allMaterials.push(accentMaterial);
-
-  const accentPanel = b(1.05, 0.08, 0.03, accentMaterial);
-  accentPanel.position.set(0.05, 2.55, -2.93);
-  worldAccentGroup.add(accentPanel);
-
-  const accentColumn = b(0.05, 1.1, 0.03, accentMaterial);
-  accentColumn.position.set(-2.93, 1.65, 1.55);
-  accentColumn.rotation.y = Math.PI / 2;
-  worldAccentGroup.add(accentColumn);
-
-  const accentDisk = c(0.18, 0.18, 0.015, 24, accentMaterial);
-  accentDisk.position.set(-1.8, 0.77, 0.8);
-  worldAccentGroup.add(accentDisk);
-
-  addToScene(worldAccentGroup);
+  // Accent panels removed - they served no functional purpose
 
   /* ─────────────── Cleanup Function ─────────────────────── */
   function cleanup() {
