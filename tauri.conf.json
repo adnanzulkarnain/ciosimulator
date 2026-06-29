@@ -1,0 +1,60 @@
+{
+  "productName": "CIO Simulator",
+  "version": "1.0.0",
+  "identifier": "com.ciosimulator.app",
+  "build": {
+    "beforeBuildCommand": "",
+    "beforeDevCommand": "",
+    "devUrl": "http://localhost:8000",
+    "frontendDist": "."
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "CIO Simulator — IT Governance Game",
+        "width": 1280,
+        "height": 900,
+        "minWidth": 1024,
+        "minHeight": 768,
+        "resizable": true,
+        "fullscreen": false,
+        "decorations": true,
+        "alwaysOnTop": false
+      }
+    ],
+    "security": {
+      "csp": "default-src blob: data: filesystem: ws: http: https: 'unsafe-eval' 'unsafe-inline' 'self' img-src: 'self'"
+    },
+    "macOSPrivateApi": false
+  },
+  "bundle": {
+    "active": true,
+    "targets": [
+      "exe",
+      "msi"
+    ],
+    "identifier": "com.ciosimulator.app",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "deb": {
+      "depends": []
+    },
+    "macOS": {
+      "frameworks": [],
+      "minimumSystemVersion": "10.13",
+      "useBootstrapper": true,
+      "exceptionDomain": "com.ciosimulator.app"
+    },
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "signingIdentity": null,
+      "timestampUrl": ""
+    }
+  }
+}
